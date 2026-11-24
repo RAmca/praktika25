@@ -1,0 +1,68 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <locale.h>
+#define K 10
+#define N 500
+#define R 40
+
+int rand10(int tmax) {
+    return 1 + rand() % tmax;
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    srand((unsigned)time(NULL));
+    int counter[K + 1] = { 0 };
+    int array[N];
+    int i, j;
+    int x;
+    int max_count;
+
+    for (i = 0; i < N; i++) {
+        array[i] = rand10(K);
+    }
+
+    for (i = 0; i < N; i++) {
+        counter[array[i]]++;
+    }
+
+    max_count = counter[1];
+    for (i = 2; i <= K; i++) {
+        if (counter[i] > max_count) {
+            max_count = counter[i];
+        }
+    }
+    printf("Гистограмма частоты выпадения чисел от 1 до %d (%d чисел)\n\n", K, N);
+
+    for (j = R; j >= 1; j--) {
+        for (i = 1; i <= K; i++) {
+            x = counter[i] * R / max_count;
+            if (x >= j) {
+                printf("*  ");
+            }
+            else {
+                printf("   ");
+            }
+        }
+        printf("\n");
+    }
+
+    for (i = 1; i <= K; i++) {
+        printf("---");
+    }
+    printf("\n");
+    for (i = 1; i <= K; i++) {
+        printf("%-3d", i);
+    }
+    printf("\n\n");
+    // таблица
+    printf("Число   Кол-во   Частота, %%\n");
+    printf("---------------------------\n");
+    for (i = 1; i <= K; i++) {
+        printf("%-7d %-8d %.1f\n", i, counter[i], 100.0 * counter[i] / N);
+    }
+    printf("\nВсего чисел: %d\n", N);
+    return 0;
+}
