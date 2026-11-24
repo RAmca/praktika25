@@ -1,0 +1,74 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <locale.h>
+#define N 12
+
+int rand10(int tmax) {
+    return 1 + rand() % tmax;
+}
+
+int* sort_until(int *begin, int *end, int k) {
+    int n = (int)(end - begin);   // количество элементов
+    int i, j, temp;
+    if (k > n) {
+        k = n;
+    }
+    if (k < 0) {
+        k = 0;
+    }
+    // сортировка пузырьком
+    for (i = 0; i < k - 1; i++) {
+        for (j = 0; j < k - 1 - i; j++) {
+            if (*(begin + j) > *(begin + j + 1)) {
+                temp = *(begin + j);
+                *(begin + j) = *(begin + j + 1);
+                *(begin + j + 1) = temp;
+            }
+        }
+    }
+    return begin;
+}
+
+void print_array(const int *a, int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        printf("%4d", a[i]);
+    }
+    printf("\n");
+}
+int main() {
+    setlocale(LC_ALL, "Russian");
+    srand((unsigned)time(NULL));
+    int a[N];
+    int i, k;
+    int ok = 1;
+    // заполнение массива
+    for (i = 0; i < N; i++) {
+        a[i] = rand10(100);
+    }
+    printf("Исходный массив:\n");
+    print_array(a, N);
+    printf("\nВведите K (сколько первых элементов упорядочить, 1..%d): ", N);
+    scanf("%d", &k);
+    sort_until(a, a + N, k);
+    printf("\nМассив после сортировки первых %d элементов:\n", k);
+    print_array(a, N);
+ 
+    if (k > N) {
+        k = N;
+    }
+    for (i = 0; i < k - 1; i++) {
+        if (a[i] > a[i + 1]) {
+            ok = 0;
+        }
+    }
+    if (ok) {
+        printf("\nПервые %d элементов упорядочены по возрастанию.\n", k);
+    }
+    else {
+        printf("\nОшибка: элементы не упорядочены.\n");
+    }
+    return 0;
+}
