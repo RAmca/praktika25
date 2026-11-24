@@ -1,0 +1,40 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <locale.h>
+int main() {
+    setlocale(LC_ALL, "Russian");
+    
+    srand((unsigned)time(NULL));
+    int m = 1 + rand() % 10;   //загаданное число
+    int k;
+    int attempts = 0;
+    printf("Игра \"Угадай число\"\n");
+    printf("Компьютер загадал число от 1 до 10.\n");
+    printf("Введите 0, чтобы выйти из игры.\n\n");
+
+    while (1) {
+        printf("Ваш вариант: ");
+        if (scanf("%d", &k) != 1) {
+            printf("Ошибка ввода.\n");
+            break;
+        }
+        if (k == 0) {
+            printf("Вы вышли из игры. Было загадано число %d.\n", m);
+            break;
+        }
+        attempts++;
+        if (k == m) {
+            printf("Верно! Число угадано с %d попытки.\n", attempts);
+            break;
+        }
+        else if (k < m) {
+            printf("Загаданное число больше.\n");
+        }
+        else {
+            printf("Загаданное число меньше.\n");
+        }
+    }
+    return 0;
+}
