@@ -1,0 +1,90 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <locale.h>
+
+int rand10(int tmax) {
+    return 1 + rand() % tmax;
+}
+
+double rand_double(double dmin, double dmax) {
+    return dmin + (dmax - dmin) * rand() / RAND_MAX;
+}
+
+int* rand10_array(int n, int tmax) {
+    int *a = (int *)malloc(n * sizeof(int));
+    int i;
+    if (a == NULL) {
+        return NULL;
+    }
+    for (i = 0; i < n; i++) {
+        a[i] = rand10(tmax);
+    }
+    return a;
+}
+
+double* rand_double_array(int n, double dm) {
+    double *a = (double *)malloc(n * sizeof(double));
+    int i;
+    if (a == NULL) {
+        return NULL;
+    }
+    for (i = 0; i < n; i++) {
+        a[i] = rand_double(-dm, dm);
+    }
+    return a;
+}
+int main() {
+    setlocale(LC_ALL, "Russian");
+    int n = 10;        // размер массивов
+    int tmax = 10;     // верхняя граница целых чисел
+    double dm = 5.0;   // граница вещественных чисел
+    int i;
+    srand((unsigned)time(NULL));   // рандом
+
+    printf("--- rand10(%d): одно целое число ---\n", tmax);
+    printf("%d\n", rand10(tmax));
+    printf("\n--- rand_double: одно вещественное в диапазоне от -%d до +%d ---\n",
+           (int)dm, (int)dm);
+    printf("%.4f\n", rand_double(-dm, dm));
+    int *ints = rand10_array(n, tmax);
+    printf("\n--- rand10_array(%d, %d) ---\n", n, tmax);
+    for (i = 0; i < n; i++) {
+        printf("%3d", ints[i]);
+    }
+
+    printf("\n");
+    double *dbl = rand_double_array(n, dm);
+    printf("\n--- rand_double_array: %d чисел в диапазоне от -%d до +%d ---\n",
+           n, (int)dm, (int)dm);
+    for (i = 0; i < n; i++) {
+        printf("%8.3f", dbl[i]);
+    }
+
+    printf("\n");
+    printf("\n--- Сравнение последовательностей ---\n");
+    srand(12);
+    printf("srand(12):    ");
+    for (i = 0; i < 5; i++) {
+        printf("%3d", rand10(100));
+    }
+
+    printf("\n");
+    srand(12);
+    printf("srand(12):    ");
+    for (i = 0; i < 5; i++) {
+        printf("%3d", rand10(100));
+    }
+
+    printf("   <- та же последовательность\n");
+    srand((unsigned)time(NULL));
+    printf("srand(time): ");
+    for (i = 0; i < 5; i++) {
+        printf("%3d", rand10(100));
+    }
+    printf("   <- новая последовательность\n");
+    free(ints);
+    free(dbl);
+    return 0;
+}
