@@ -1,0 +1,52 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <locale.h>
+#define ROUNDS 5
+
+// бросок кубика
+
+int roll(int min, int max) {
+    return min + rand() % (max - min + 1);
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    srand((unsigned)time(NULL));
+    int player_score = 0;
+    int computer_score = 0;
+    int i, player, computer;
+    printf("Игра в кости: %d бросков, у кого больше очков - тот победил.\n\n", ROUNDS);
+    printf("Бросок   Игрок   Компьютер   Итог\n");
+    printf("----------------------------------\n");
+
+    for (i = 1; i <= ROUNDS; i++) {
+        player = roll(1, 6);
+        computer = roll(1, 6);
+        printf("%-8d %-7d %-11d ", i, player, computer);
+        if (player > computer) {
+            player_score++;
+            printf("очко игроку\n");
+        }
+        else if (player < computer) {
+            computer_score++;
+            printf("очко компьютеру\n");
+        }
+        else {
+            printf("ничья\n");
+        }
+    }
+    printf("----------------------------------\n");
+    printf("Счёт: игрок %d : %d компьютер\n\n", player_score, computer_score);
+    if (player_score > computer_score) {
+        printf("Победил игрок!\n");
+    }
+    else if (player_score < computer_score) {
+        printf("Победил компьютер.\n");
+    }
+    else {
+        printf("Ничья.\n");
+    }
+    return 0;
+}
